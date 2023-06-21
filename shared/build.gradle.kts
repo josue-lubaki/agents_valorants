@@ -1,8 +1,14 @@
+import java.util.Properties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
-    id("com.android.library")
-    id("org.jetbrains.compose")
+    kotlin("plugin.serialization")
+    alias(libs.plugins.library)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.konfig)
 }
 
 kotlin {
@@ -22,7 +28,8 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+        extraSpecAttributes["resources"] =
+            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -33,13 +40,39 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                api(compose.materialIconsExtended)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+
+                // Ktor
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.content.negotiation)
+
+                // Koin
+                implementation(libs.koin.core)
+
+                // Serialization
+                implementation(libs.kotlinx.serialization.json)
+
+                // Image Loader
+                api(libs.image.loader)
+
+                // precompose - for viewmodel and navigation
+                api(libs.precompose)
+                api(libs.precompose.viewmodel)
             }
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.activity:activity-compose:1.6.1")
+                api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.9.0")
+                api("androidx.core:core-ktx:1.10.1")
+
+                implementation(libs.koin.android)
+                implementation(libs.ktor.okhttp)
             }
         }
         val iosX64Main by getting
@@ -54,9 +87,24 @@ kotlin {
     }
 }
 
+buildkonfig {
+    packageName = "com.myapplication"
+
+    val properties = Properties()
+
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if(localPropertiesFile.exists()){
+        localPropertiesFile.inputStream().use { properties.load(it) }
+    }
+
+    defaultConfigs {
+        buildConfigField(STRING, "TOTO", properties.getProperty("TOTO"))
+    }
+}
+
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.myapplication.common"
+    namespace = "com.myapplication"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -67,10 +115,15 @@ android {
         targetSdk = (findProperty("android.targetSdk") as String).toInt()
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlin {
-        jvmToolchain(11)
+        jvmToolchain{
+            (this as JavaToolchainSpec).apply {
+                languageVersion.set(JavaLanguageVersion.of(17))
+            }
+        }
     }
 }
