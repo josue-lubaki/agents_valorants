@@ -1,5 +1,5 @@
-import java.util.Properties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import java.util.Properties
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -22,14 +22,13 @@ kotlin {
         version = "1.0.0"
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
-        ios.deploymentTarget = "14.1"
+        ios.deploymentTarget = "16.0"
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
             isStatic = true
         }
-        extraSpecAttributes["resources"] =
-            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+        extraSpecAttributes["resources"] = "['src/commonMain/resources/**']"
     }
 
     sourceSets {
@@ -67,9 +66,9 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.activity:activity-compose:1.7.2")
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.10.1")
+                api(libs.activity.compose)
+                api(libs.appcompat)
+                api(libs.core.ktx)
 
                 implementation(libs.koin.android)
                 implementation(libs.ktor.okhttp)
@@ -98,7 +97,8 @@ buildkonfig {
     }
 
     defaultConfigs {
-        buildConfigField(STRING, "TOTO", properties.getProperty("TOTO"))
+        buildConfigField(STRING, "BASE_URL", properties.getProperty("BASE_URL"))
+        buildConfigField(STRING, "API_KEY", properties.getProperty("API_KEY"))
     }
 }
 

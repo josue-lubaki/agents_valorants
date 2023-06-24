@@ -3,8 +3,9 @@ package com.myapplication
 import MainView
 import android.app.Activity
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import moe.tlaster.precompose.lifecycle.PreComposeActivity
+import moe.tlaster.precompose.lifecycle.setContent
 
 /**
  * created by Josue Lubaki
@@ -12,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
  * version : 1.0.0
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : PreComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
