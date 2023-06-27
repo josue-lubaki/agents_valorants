@@ -1,6 +1,7 @@
 package di
 
 import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
 
 /**
  * created by Josue Lubaki
@@ -8,8 +9,9 @@ import org.koin.core.context.startKoin
  * version : 1.0.0
  */
 
-fun initKoin() {
+fun initKoin(appDeclaration: KoinAppDeclaration = {}) {
     startKoin {
+        appDeclaration()
         modules(getSharedModule())
     }
 }

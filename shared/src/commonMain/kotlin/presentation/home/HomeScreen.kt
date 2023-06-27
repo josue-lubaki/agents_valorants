@@ -12,21 +12,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import domain.model.Movie
-import presentation.components.MovieListItem
+import domain.model.Agent
 import utils.Colors
 
 /**
@@ -35,12 +29,11 @@ import utils.Colors
  * version : 1.0.0
  */
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     viewModel : HomeViewModel,
     modifier: Modifier = Modifier,
-    navigateToDetails: (Movie) -> Unit,
+    navigateToDetails: (Agent) -> Unit,
 ) {
 
     val uiState = viewModel.uiState
@@ -52,18 +45,18 @@ fun HomeScreen(
         viewModel.loadMovies(forceReload = false)
     }
 
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = uiState.refreshing,
-        onRefresh = { loadNextMovies() }
-    )
+//    val pullRefreshState = rememberPullRefreshState(
+//        refreshing = uiState.refreshing,
+//        onRefresh = { loadNextMovies() }
+//    )
 
     val lazyState = rememberLazyGridState()
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colors.onBackground)
-            .pullRefresh(state = pullRefreshState)
+            .background(color = MaterialTheme.colorScheme.onBackground)
+//            .pullRefresh(state = pullRefreshState)
     ) {
 
         LazyVerticalGrid(
@@ -74,27 +67,27 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
-            itemsIndexed(
-                items = uiState.movies,
-                key = { _, movie -> movie.id }
-            ) { index, movie ->
-                MovieListItem(
-                    movie = movie,
-                    onClick = { navigateToDetails(movie) },
-                )
+//            itemsIndexed(
+//                items = uiState.movies,
+//                key = { _, movie -> movie.id }
+//            ) { index, movie ->
+//                MovieListItem(
+//                    movie = movie,
+//                    onClick = { navigateToDetails(movie) },
+//                )
+//
+//                if (
+//                    index >= uiState.movies.size - 1
+//                    && !uiState.loading
+//                    && !uiState.loadFinished
+//                ) {
+//                    LaunchedEffect(Unit) {
+//                        loadNextMovies()
+//                    }
+//                }
+//            }
 
-                if (
-                    index >= uiState.movies.size - 1
-                    && !uiState.loading
-                    && !uiState.loadFinished
-                ) {
-                    LaunchedEffect(Unit) {
-                        loadNextMovies()
-                    }
-                }
-            }
-
-            if(uiState.loading && uiState.movies.isNotEmpty()){
+            if(uiState.loading && uiState.agents!!.isNotEmpty()){
                 item(span = { GridItemSpan(2) }){
                     Row(
                         modifier = Modifier
@@ -111,10 +104,10 @@ fun HomeScreen(
             }
         }
 
-        PullRefreshIndicator(
-            refreshing = uiState.refreshing,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
+//        PullRefreshIndicator(
+//            refreshing = uiState.refreshing,
+//            state = pullRefreshState,
+//            modifier = Modifier.align(Alignment.TopCenter),
+//        )
     }
 }

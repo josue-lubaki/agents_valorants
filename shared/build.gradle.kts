@@ -9,11 +9,13 @@ plugins {
     alias(libs.plugins.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.konfig)
+    id("com.squareup.sqldelight")
 }
 
 kotlin {
     android()
 
+    ios()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -36,7 +38,7 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material)
+                implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
@@ -62,6 +64,10 @@ kotlin {
                 // precompose - for viewmodel and navigation
                 api(libs.precompose)
                 api(libs.precompose.viewmodel)
+
+                // SQLDelight
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutines.extensions)
             }
         }
         val androidMain by getting {
@@ -70,18 +76,26 @@ kotlin {
                 api(libs.appcompat)
                 api(libs.core.ktx)
 
-                implementation(libs.koin.android)
+                api(libs.koin.android)
                 implementation(libs.ktor.okhttp)
+
+                implementation(libs.ktor.client.android)
+                implementation(libs.android.driver)
             }
         }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
-        val iosMain by creating {
+        val iosMain by getting {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+                implementation(libs.native.driver)
+            }
         }
     }
 }
@@ -98,7 +112,6 @@ buildkonfig {
 
     defaultConfigs {
         buildConfigField(STRING, "BASE_URL", properties.getProperty("BASE_URL"))
-        buildConfigField(STRING, "API_KEY", properties.getProperty("API_KEY"))
     }
 }
 
@@ -125,5 +138,12 @@ android {
                 languageVersion.set(JavaLanguageVersion.of(17))
             }
         }
+    }
+}
+
+sqldelight {
+    database("AgentXDatabase") {
+        packageName = "com.myapplication.database"
+        sourceFolders = listOf("sqldelight")
     }
 }

@@ -2,6 +2,7 @@ package com.myapplication
 
 import android.app.Application
 import di.initKoin
+import org.koin.android.ext.koin.androidContext
 
 /**
  * created by Josue Lubaki
@@ -13,6 +14,8 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        initKoin()
+        initKoin(){
+            androidContext(this@MyApplication)
+        }
     }
 }

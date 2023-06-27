@@ -3,14 +3,14 @@ package presentation.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import domain.usecases.GetMoviesUseCase
+import domain.usecases.GetAllAgentsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import utils.network.DataState
+import utils.network.Resource
 
 /**
  * created by Josue Lubaki
@@ -19,42 +19,34 @@ import utils.network.DataState
  */
 
 class HomeViewModel : ViewModel(), KoinComponent {
-    private val getMoviesUseCase: GetMoviesUseCase by inject()
+    private val getMoviesUseCase: GetAllAgentsUseCase by inject()
     private val dispatchers : CoroutineDispatcher by inject()
 
-    private var currentPage = 1
     var uiState by mutableStateOf(HomeState())
 
     fun loadMovies(forceReload: Boolean) {
         if(uiState.loading) return
-        if(forceReload) currentPage = 1
-        if(currentPage == 1) uiState = uiState.copy(refreshing = true)
 
         viewModelScope.launch(dispatchers) {
-            getMoviesUseCase(currentPage).collect {
-                when (it) {
-                    is DataState.Error -> {
+            getMoviesUseCase().collect {
+                when(it) {
+                    is Resource.Loading -> {
+                        uiState = uiState.copy(loading = true)
+                    }
+
+                    is Resource.Error -> {
+                        uiState = uiState.copy(
+                            loading = false,
+                            refreshing = false
+                        )
+                    }
+                    is Resource.Success -> {
                         uiState = uiState.copy(
                             loading = false,
                             refreshing = false,
-                            errorMessage = it.exception.message,
-                        )
-                    }
-                    is DataState.Loading -> {
-                        uiState = uiState.copy(
-                            loading = true,
-                        )
-                    }
-                    is DataState.Success ->  {
-                        val movies = if(currentPage == 1) it.data else uiState.movies + it.data
-
-                        currentPage += 1
-
-                        uiState = uiState.copy(
-                            loading = false,
-                            refreshing = false,
-                            loadFinished = it.data.isEmpty(),
-                            movies = movies,
+                            agents = it.data?.items,
+                            errorMessage = null,
+                            loadFinished = true
                         )
                     }
                 }

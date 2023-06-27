@@ -24,6 +24,8 @@ serializationVersion = "1.3.0"
 konfigVersion = "0.13.3"
 runtimeVersion = "1.4.0"
 navigationComposeVersion = "2.7.0-beta01"
+sqlDelightVersion = "1.5.5"
+sqlDelightCoroutinesExtensions = "1.5.3"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -49,6 +51,12 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktorVersion" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
 ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktorVersion" }
+
+# sqlDelight
+android-driver = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqlDelightVersion" }
+native-driver = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqlDelightVersion" }
+sqldelight-runtime = { module = "com.squareup.sqldelight:runtime", version.ref = "sqlDelightVersion" }
+sqldelight-coroutines-extensions = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqlDelightCoroutinesExtensions" }
 
 # Koin
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koinVersion" }
@@ -79,6 +87,7 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilVersion" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanistVersion" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationVersion" }
+sqldelight = { group = "com.squareup.sqldelight", name = "gradle-plugin", version.ref = "sqlDelightVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

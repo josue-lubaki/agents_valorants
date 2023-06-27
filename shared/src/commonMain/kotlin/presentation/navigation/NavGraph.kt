@@ -8,8 +8,6 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.route.Route
-import presentation.detail.DetailScreen
-import presentation.detail.DetailViewModel
 import presentation.home.HomeScreen
 import presentation.home.HomeViewModel
 
@@ -33,20 +31,20 @@ fun NavGraph(
             val homeViewModel = HomeViewModel()
             HomeScreen(
                 viewModel = homeViewModel,
-                navigateToDetails = { movie ->
-                    navigator.navigate("${Detail.route}/${movie.id}")
+                navigateToDetails = { agent ->
+                    navigator.navigate("${Detail.route}/${agent.uuid}")
                 },
             )
         }
 
-        scene(route = Detail.routeWithArgs) {
-            val movieId: Int = it.path<Int>(Detail.argsName) ?: 0
-            val detailViewModel = DetailViewModel()
-            DetailScreen(
-                viewModel = detailViewModel,
-                movieId = movieId
-            )
-        }
+//        scene(route = Detail.routeWithArgs) {
+//            val movieId: Int = it.path<Int>(Detail.argsName) ?: 0
+//            val detailViewModel = DetailViewModel()
+//            DetailScreen(
+//                viewModel = detailViewModel,
+//                movieId = movieId
+//            )
+//        }
     }
 }
 

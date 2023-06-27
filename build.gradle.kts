@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath(libs.sqldelight)
+    }
+}
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
