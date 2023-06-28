@@ -33,4 +33,22 @@ class AgentRepositoryImpl(
             }
         )
     }
+
+    override fun getAgent(uuid : String): Flow<Resource<List<Agent>>> {
+//        return remoteDataSource.getAgent(uuid).data.toAgentEntity().toAgent()
+        return networkBoundResource(
+            query = {
+                localDataSource.getAgent(uuid).map {
+                    it.map { it.toAgent() }
+                }
+            },
+            fetch = {
+                remoteDataSource.getAgent(uuid)
+            },
+            saveFetchResult = {
+                val items = it.data.toAgentEntity()
+                localDataSource.insertAgent(listOf(items))
+            }
+        )
+    }
 }

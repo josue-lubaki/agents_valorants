@@ -25,3 +25,8 @@ background,
 backgroundGradientColors,
 role
 ) VALUES(?,?,?,?,?,?,?,?);
+
+getAgentByUuid:
+SELECT *
+FROM agentEntity
+WHERE uuid = ?;

@@ -31,4 +31,8 @@ class LocalDataSourceImpl(db: AgentXDatabase): LocalDataSource {
         }
     }
 
+    override fun getAgent(uuid: String): Flow<List<AgentEntity>> {
+        return queries.getAgentByUuid(uuid).asFlow().mapToList()
+    }
+
 }

@@ -9,7 +9,7 @@ interface Destination {
 
 object Home: Destination {
     override val title: String
-        get() = "Movies"
+        get() = "Agents"
 
     override val route: String
         get() = "home"
@@ -20,13 +20,13 @@ object Home: Destination {
 
 object Detail: Destination{
     override val title: String
-        get() = "Movie details"
+        get() = "Agent details"
 
     override val route: String
         get() = "detail"
 
     override val argsName: String
-        get() = "movieId"
+        get() = "agentUuid"
 
     override val routeWithArgs: String
         get() = "$route/{$argsName}"

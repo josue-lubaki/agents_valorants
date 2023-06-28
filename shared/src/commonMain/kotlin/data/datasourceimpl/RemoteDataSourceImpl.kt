@@ -16,4 +16,8 @@ internal class RemoteDataSourceImpl(
             service.getAllAgents()
         }
     }
+
+    override suspend fun getAgent(uuid: String): Response<AgentDTO> {
+        return service.getAgent(uuid)
+    }
 }

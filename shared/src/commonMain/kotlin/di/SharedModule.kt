@@ -10,6 +10,7 @@ import data.db.createDatabase
 import data.db.sqlDriverFactory
 import data.repository.AgentRepositoryImpl
 import domain.repository.AgentRepository
+import domain.usecases.GetAgentUseCase
 import domain.usecases.GetAllAgentsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import org.koin.dsl.module
@@ -36,6 +37,7 @@ private val utilityModule = module {
 private val domainModule = module {
     single<AgentRepository> { AgentRepositoryImpl(get(), get()) }
     single<GetAllAgentsUseCase> { GetAllAgentsUseCase() }
+    single<GetAgentUseCase> { GetAgentUseCase() }
 }
 
 private val _sharedModule = listOf(dataModule, utilityModule, domainModule)

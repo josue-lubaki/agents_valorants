@@ -17,4 +17,8 @@ internal class AgentXService : Api() {
     suspend fun getAllAgents() : Response<List<AgentDTO>> = client.get {
         parameterUrl(URL.AGENTS, URL.AGENTS_PARAMS)
     }.body()
+
+    suspend fun getAgent(uuid: String): Response<AgentDTO> = client.get {
+        parameterUrl("${URL.AGENTS}/$uuid", null)
+    }.body()
 }

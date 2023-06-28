@@ -6,4 +6,5 @@ import utils.network.Resource
 
 interface AgentRepository {
     fun getAllAgents():Flow<Resource<List<Agent>>>
+    fun getAgent(uuid : String): Flow<Resource<List<Agent>>>
 }

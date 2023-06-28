@@ -5,8 +5,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import moe.tlaster.precompose.navigation.rememberNavigator
-import presentation.AgentListScreen
-import presentation.AgentListScreenViewModel
 
 @Composable
 internal fun App() {
@@ -16,7 +14,7 @@ internal fun App() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            AgentListScreen(viewModel = AgentListScreenViewModel())
+            AppSetup(navigator)
         }
     }
 }

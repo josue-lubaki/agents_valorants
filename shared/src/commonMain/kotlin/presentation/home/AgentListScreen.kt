@@ -2,7 +2,7 @@
     ExperimentalFoundationApi::class
 )
 
-package presentation
+package presentation.home
 
 //import androidx.compose.ui.platform.LocalConfiguration
 //import coil.compose.AsyncImage
@@ -62,10 +62,11 @@ import presentation.common.Fonts
 
 //import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun AgentListScreen(
-    viewModel: AgentListScreenViewModel
+    viewModel: AgentListScreenViewModel,
+    onNavigateToDetail: (String) -> Unit,
 ) {
 
     //for restart play lottie animation
@@ -116,11 +117,9 @@ fun AgentListScreen(
 
     //gradient color for background
     val colors = listOf(
-        MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.background
+        MaterialTheme.colorScheme.onBackground,
+        MaterialTheme.colorScheme.secondaryContainer
     )
-
-
 
     Scaffold {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -178,11 +177,11 @@ fun AgentListScreen(
 
         if (!state.isLoading && state.agents.isNotEmpty()) {
 
-
             //success state
             Column(
                 modifier = Modifier
                     .padding(it)
+                    .padding(vertical = 16.dp)
                     .fillMaxSize()
             ) {
                 AgentPager(
@@ -190,7 +189,8 @@ fun AgentListScreen(
                         .weight(1f)
                         .fillMaxSize(),
                     listState = agentState,
-                    items = state.agents
+                    items = state.agents,
+                    onNavigateToDetail = onNavigateToDetail
                 )
                 Box(modifier = Modifier.height(16.dp))
                 WheelPicker(
@@ -208,7 +208,8 @@ fun AgentListScreen(
 fun AgentPager(
     modifier: Modifier,
     listState: PagerState,
-    items: List<Agent>
+    items: List<Agent>,
+    onNavigateToDetail: (String) -> Unit
 ) {
 
 //    val height = LocalConfiguration.current.screenHeightDp
@@ -256,7 +257,10 @@ fun AgentPager(
 
 
         val index = it % items.size
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
 
             Box(
                 modifier = Modifier
@@ -269,12 +273,6 @@ fun AgentPager(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-//                AsyncImage(
-//                    model = "${items[index].background}",
-//                    contentDescription = null,
-//                    contentScale = ContentScale.FillHeight,
-//                    modifier = Modifier.alpha(alpha)
-//                )
                 Image(
                     painter = rememberAsyncImagePainter(
                         url = "${items[index].background}",
@@ -283,6 +281,9 @@ fun AgentPager(
                     contentDescription = null,
                     contentScale = ContentScale.FillHeight,
                     modifier = Modifier.alpha(alpha)
+                        .clickable {
+                            onNavigateToDetail(items[index].uuid)
+                        }
                 )
             }
 
@@ -334,7 +335,7 @@ fun AgentPager(
 @Composable
 fun WheelPicker(
     items: List<Agent>,
-    listState: PagerState
+    listState: PagerState,
 ) {
 
 
@@ -357,7 +358,7 @@ fun WheelPicker(
 
         val pageOffset = (listState.currentPage - it) + listState.currentPageOffsetFraction
 
-        val boxSize = 80f
+        val boxSize = 100f
 
         val size by animateFloatAsState(
             targetValue = if (pageOffset == 0f) boxSize else (boxSize / 1.2).toFloat(),
