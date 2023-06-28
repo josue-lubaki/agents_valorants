@@ -11,10 +11,10 @@ The result will be a [Kotlin Multiplatform](https://kotlinlang.org/docs/multipla
 [Install APK](https://github.com/josue-lubaki/agents_valorants/blob/main/androidApp-debug.apk)
 
 # Dependencies
-✅ BuildKonfig
-✅ Image Loader
-✅ Koin
-✅ Ktor
+✅ BuildKonfig <br />
+✅ Image Loader  <br />
+✅ Koin <br />
+✅ Ktor <br />
 ✅ SqlDelight
 
 # credit
