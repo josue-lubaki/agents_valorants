@@ -8,7 +8,7 @@ You can use this template to start developing your own [Compose Multiplatform](h
 The result will be a [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) project that uses the Compose Multiplatform UI framework.
 
 ## Download APK
-[Install APK](https://github.com/josue-lubaki/agents_valorants/blob/main/androidApp-debug.apk)
+⬇ [Install APK](https://github.com/josue-lubaki/agents_valorants/blob/main/androidApp-debug.apk)
 
 # Dependencies
 ✅ BuildKonfig <br />
