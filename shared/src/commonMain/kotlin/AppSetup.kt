@@ -1,4 +1,5 @@
 
+import Home.route
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -23,13 +24,11 @@ fun AppSetup(navigator: Navigator) {
 
     Scaffold(
         topBar = {
-            if(currentRoute.isShowingTopAppBar()){
+            currentRoute.canShowingTopAppBar().takeIf { it }?.apply {
                 AgentAppBar(
                     title = Home.title,
-                    onNavigateBack = {
-                        navigator.goBack()
-                    },
-                    iconVisible = navigator.currentRoute()?.route != Home.route
+                    onNavigateBack = navigator::goBack,
+                    iconVisible = navigator.currentRoute()?.route != route
                 )
             }
         }
@@ -42,12 +41,7 @@ fun AppSetup(navigator: Navigator) {
     }
 }
 
-private fun Route?.isShowingTopAppBar(): Boolean {
+private fun Route?.canShowingTopAppBar(): Boolean {
     val routeToDisplay = listOf(Detail.routeWithArgs)
     return (routeToDisplay.contains(this?.route))
 }
-
-//private fun Navigator.showTopAppBar(currentRoute : Route?) : Boolean {
-//    val routeToDisplay = listOf(Detail.routeWithArgs)
-//    return (routeToDisplay.contains(currentRoute?.route))
-//}

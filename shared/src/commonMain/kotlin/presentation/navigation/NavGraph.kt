@@ -1,6 +1,10 @@
 package presentation.navigation
 
 import Detail
+import Home
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -8,10 +12,11 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.route.Route
-import presentation.home.AgentListScreen
-import presentation.home.AgentListScreenViewModel
+import moe.tlaster.precompose.navigation.transition.NavTransition
 import presentation.detail.DetailScreen
 import presentation.detail.DetailViewModel
+import presentation.home.AgentListScreen
+import presentation.home.AgentListScreenViewModel
 
 /**
  * created by Josue Lubaki
@@ -29,23 +34,40 @@ fun NavGraph(
         initialRoute = Home.route,
         modifier = modifier
     ){
-        scene(route = Home.route) {
+        scene(
+            route = Home.route,
+            navTransition = NavTransition(
+                createTransition =
+                    fadeIn(animationSpec = tween(600)),
+
+                resumeTransition =
+                   fadeIn(animationSpec = tween(600)),
+
+               destroyTransition =
+                   fadeOut(animationSpec = tween(600))
+            )
+        ) {
             AgentListScreen(
                 viewModel = AgentListScreenViewModel(),
                 onNavigateToDetail = { uuid ->
                     navigator.navigate("${Detail.route}/$uuid")
                 }
             )
-//            val homeViewModel = HomeViewModel()
-//            HomeScreen(
-//                viewModel = homeViewModel,
-//                navigateToDetails = { agent ->
-//                    navigator.navigate("${Detail.route}/${agent.uuid}")
-//                },
-//            )
         }
 
-        scene(route = Detail.routeWithArgs) {
+        scene(
+            route = Detail.routeWithArgs,
+            navTransition = NavTransition(
+                createTransition =
+                    fadeIn(animationSpec = tween(600)),
+
+                resumeTransition =
+                    fadeIn(animationSpec = tween(600)),
+
+                destroyTransition =
+                    fadeOut(animationSpec = tween(600))
+            )
+        ) {
             val agentUuid: String = it.path<String>(Detail.argsName) ?: ""
             val detailViewModel = DetailViewModel()
             DetailScreen(
